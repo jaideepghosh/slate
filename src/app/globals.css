@@ -1,0 +1,165 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Design Tokens ─────────────────────────────────────────────────────────── */
+:root {
+  /* Surfaces */
+  --surface-0: #ffffff;
+  --surface-1: #f7f7f8;
+  --surface-2: #efeff1;
+  --surface-3: #e4e4e8;
+
+  /* Text */
+  --text-primary: #111118;
+  --text-secondary: #52525e;
+  --text-tertiary: #9898a8;
+  --text-accent: #007aff;
+
+  /* Borders */
+  --border-subtle: rgba(0, 0, 0, 0.06);
+  --border-default: rgba(0, 0, 0, 0.12);
+
+  /* Accent — warm indigo/blue, distinct from generic blue */
+  --accent: #4f46e5;
+  --accent-hover: #4338ca;
+  --accent-muted: rgba(79, 70, 229, 0.1);
+
+  /* Status */
+  --danger: #ef4444;
+  --success: #22c55e;
+  --warning: #f59e0b;
+
+  /* Shadows */
+  --shadow-panel: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-float: 0 8px 24px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08);
+  --shadow-toast: 0 4px 16px rgba(0,0,0,0.14), 0 1px 4px rgba(0,0,0,0.08);
+
+  /* Layout */
+  --toolbar-height: 52px;
+  --statusbar-height: 26px;
+}
+
+.dark {
+  --surface-0: #141416;
+  --surface-1: #1c1c1f;
+  --surface-2: #242428;
+  --surface-3: #2e2e33;
+
+  --text-primary: #f2f2f7;
+  --text-secondary: #a0a0b0;
+  --text-tertiary: #5e5e72;
+  --text-accent: #6b8af7;
+
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-default: rgba(255, 255, 255, 0.10);
+
+  --accent: #6366f1;
+  --accent-hover: #818cf8;
+  --accent-muted: rgba(99, 102, 241, 0.15);
+
+  --shadow-panel: 0 1px 3px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2);
+  --shadow-float: 0 8px 24px rgba(0,0,0,0.5), 0 2px 8px rgba(0,0,0,0.3);
+  --shadow-toast: 0 4px 16px rgba(0,0,0,0.5), 0 1px 4px rgba(0,0,0,0.3);
+}
+
+/* ── Base ──────────────────────────────────────────────────────────────────── */
+* { box-sizing: border-box; }
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', system-ui, sans-serif;
+  background-color: var(--surface-0);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* ── Scrollbars ────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-default); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-tertiary); }
+
+/* ── Focus Rings ───────────────────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ── Selection ─────────────────────────────────────────────────────────────── */
+::selection {
+  background: var(--accent-muted);
+  color: var(--text-primary);
+}
+
+/* ── RichPad Overrides ─────────────────────────────────────────────────────── */
+.notes-editor .ProseMirror {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--text-primary);
+  min-height: calc(100vh - var(--toolbar-height) - 120px);
+  padding: 32px 48px;
+  max-width: 800px;
+  margin: 0 auto;
+  outline: none;
+}
+
+/* Kill focus ring on the editor itself */
+.notes-editor .ProseMirror:focus,
+.notes-editor .ProseMirror:focus-visible,
+.notes-editor [contenteditable]:focus,
+.notes-editor [contenteditable]:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
+}
+
+/* Kill any wrapper focus ring that RichPad might apply */
+.notes-editor [class*="editor"]:focus,
+.notes-editor [class*="richpad"]:focus,
+.notes-editor [class*="tiptap"]:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.notes-editor .ProseMirror p.is-editor-empty:first-child::before {
+  color: var(--text-tertiary);
+  pointer-events: none;
+  float: left;
+  height: 0;
+}
+
+.notes-editor .ProseMirror h1 { font-size: 2em; font-weight: 700; margin: 0.5em 0 0.25em; line-height: 1.2; }
+.notes-editor .ProseMirror h2 { font-size: 1.5em; font-weight: 600; margin: 1em 0 0.25em; }
+.notes-editor .ProseMirror h3 { font-size: 1.25em; font-weight: 600; margin: 1em 0 0.25em; }
+.notes-editor .ProseMirror code { background: var(--surface-2); padding: 2px 6px; border-radius: 4px; font-size: 0.88em; font-family: 'SF Mono', 'Fira Code', monospace; }
+.notes-editor .ProseMirror pre { background: var(--surface-2); border-radius: 8px; padding: 16px; overflow-x: auto; }
+.notes-editor .ProseMirror pre code { background: none; padding: 0; }
+.notes-editor .ProseMirror blockquote { border-left: 3px solid var(--accent); padding-left: 16px; color: var(--text-secondary); margin-left: 0; }
+.notes-editor .ProseMirror a { color: var(--text-accent); }
+.notes-editor .ProseMirror ul, .notes-editor .ProseMirror ol { padding-left: 1.5em; }
+.notes-editor .ProseMirror table { border-collapse: collapse; width: 100%; }
+.notes-editor .ProseMirror th, .notes-editor .ProseMirror td { border: 1px solid var(--border-default); padding: 8px 12px; }
+.notes-editor .ProseMirror th { background: var(--surface-2); font-weight: 600; }
+.notes-editor .ProseMirror hr { border: none; border-top: 2px solid var(--border-subtle); margin: 24px 0; }
+
+/* Dark mode RichPad toolbar */
+.dark .richpad-wrapper [class*="toolbar"] {
+  background: var(--surface-1) !important;
+  border-color: var(--border-subtle) !important;
+}
+
+/* ── Utility Classes ───────────────────────────────────────────────────────── */
+.no-select { user-select: none; }
+.truncate-1 { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
