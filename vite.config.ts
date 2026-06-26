@@ -4,45 +4,89 @@ import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig({
   base: process.env.GITHUB_PAGES === "true" ? "/slate/" : "/",
+
   plugins: [
     react(),
+
     VitePWA({
       registerType: "autoUpdate",
-      includeAssets: ["favicon.ico", "apple-touch-icon.png", "masked-icon.svg"],
+
+      includeAssets: [
+        "favicon.ico",
+        "favicon-16x16.png",
+        "favicon-32x32.png",
+        "apple-touch-icon.png",
+      ],
+
       manifest: {
-        name: "Notes — Your Personal Workspace",
-        short_name: "Notes",
+        id: "/",
+
+        name: "Slate - Your Personal Workspace",
+        short_name: "Slate",
+
         description:
-          "Enterprise-grade note-taking with local file system access",
+          "Local-first note-taking workspace with offline support and direct local file system access.",
+
+        start_url: "./",
+        scope: "./",
+
+        display: "standalone",
+        display_override: ["window-controls-overlay", "standalone"],
+
         theme_color: "#1a1a2e",
         background_color: "#ffffff",
-        display: "standalone",
-        orientation: "landscape",
+
+        categories: ["productivity"],
+
         icons: [
-          { src: "pwa-192x192.png", sizes: "192x192", type: "image/png" },
           {
-            src: "pwa-512x512.png",
+            src: "slate-icon-192x192.png",
+            sizes: "192x192",
+            type: "image/png",
+          },
+          {
+            src: "slate-icon-512x512.png",
             sizes: "512x512",
             type: "image/png",
-            purpose: "any maskable",
+          },
+          {
+            src: "slate-icon-512x512.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "maskable",
           },
         ],
       },
+
       workbox: {
+        navigateFallback: "index.html",
+
         globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2}"],
+
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
+            handler: "StaleWhileRevalidate",
+            options: {
+              cacheName: "google-fonts-stylesheets",
+            },
+          },
+          {
+            urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
             handler: "CacheFirst",
             options: {
-              cacheName: "google-fonts-cache",
-              expiration: { maxEntries: 10, maxAgeSeconds: 60 * 60 * 24 * 365 },
+              cacheName: "google-fonts-webfonts",
+              expiration: {
+                maxEntries: 30,
+                maxAgeSeconds: 60 * 60 * 24 * 365,
+              },
             },
           },
         ],
       },
     }),
   ],
+
   optimizeDeps: {
     include: ["react", "react-dom"],
   },
